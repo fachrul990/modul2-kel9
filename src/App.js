@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import data from './data_aegis'
+import Button from './components/Button';
+import Card from './components/Card';
+import SearchBar from './components/SearchBar';
+import './App.css'
+import { useState } from 'react';
 
 function App() {
+  const [input, setInput] = useState('')
+  const [filteredData, setFilteredData] = useState([])
+
+  const searchData = (e) => {
+    e.preventDefault()
+    input !== '' && setFilteredData(data.filter((el) => el.nama_lengkap.toLowerCase().includes(input.toLowerCase())))
+  }
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form onSubmit={searchData}>
+        <SearchBar onChange={(e) => setInput(e.target.value)} placeholder='Masukkan Nama' type="text" required />
+        <Button type="submit">Cari</Button>
+      </form>
+      <div className='container'>
+        {filteredData.map((el, index) => {
+          return (
+            <Card data={el} key={index} />
+          )
+        })}
+      </div>
     </div>
+
   );
 }
 
